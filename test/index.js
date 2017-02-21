@@ -3,15 +3,7 @@ const temp = require('../lib/template');
 
 describe('template', () => {
   it('compile should return a function', function () {
-    const template =
-      'My skills:' +
-      '<%if(this.showSkills) {%>' +
-      '<%for(var index in this.skills) {%>' +
-      '<a href="#"><%this.skills[index]%></a>' +
-      '<%}%>' +
-      '<%} else {%>' +
-      '<p>none</p>' +
-      '<%}%>';
+    const template = '';
     assert.equal(typeof temp.compile(template), 'function');
   });
 
