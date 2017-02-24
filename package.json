@@ -1,10 +1,10 @@
 {
-  "name": "template",
+  "name": "cogito",
   "version": "0.0.1",
   "description": "A tiny JavaScript templates",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yannliao/template.git"
+    "url": "https://github.com/yannliao/cogito.git"
   },
   "author": "yannliao <trembleliao@gmail.com>",
   "license": "MIT",
