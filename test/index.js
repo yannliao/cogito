@@ -10,13 +10,13 @@ describe('template', () => {
   it('render should return a valid string', function () {
     const html =
       'My skills:' +
-      '<%if(showSkills) {%>' +
-      '<%for(var index in skills) {%>' +
-      '<a href="#"><%skills[index]%></a>' +
-      '<%}%>' +
-      '<%} else {%>' +
+      '<% if(showSkills) { %>' +
+      '<% for(var index in skills) { %>' +
+      '<a href="#"><% skills[index] %></a>' +
+      '<% } %>' +
+      '<% } else { %>' +
       '<p>none</p>' +
-      '<%}%>';
+      '<% } %>';
     const data = {
       skills: ['js', 'html', 'css'],
       showSkills: true
@@ -28,13 +28,13 @@ describe('template', () => {
   it('compile should return excutable function', function () {
     const html =
       'My skills:' +
-      '<%if(showSkills) {%>' +
-      '<%for(var index in skills) {%>' +
-      '<a href="#"><%skills[index]%></a>' +
-      '<%}%>' +
-      '<%} else {%>' +
+      '<% if(showSkills) { %>' +
+      '<% for(var index in skills) { %>' +
+      '<a href="#"><% skills[index] %></a>' +
+      '<% } %>' +
+      '<% } else { %>' +
       '<p>none</p>' +
-      '<%}%>';
+      '<% } %>';
     const data = {
       skills: ['js', 'html', 'css'],
       showSkills: true
@@ -42,5 +42,23 @@ describe('template', () => {
     const result = 'My skills:<a href="#">js</a><a href="#">html</a><a href="#">css</a>';
     var temp = template.compile(html);
     assert.equal(temp(data), result, 'fail');
+  });
+
+  it('newRender should return a valid string', function () {
+    const html =
+      'My skills:' +
+      '<% if(@showSkills) { %>' +
+      '<% for(var index in @skills) { %>' +
+      '<a href="#"><% @skills[index] %></a>' +
+      '<% } %>' +
+      '<% } else { %>' +
+      '<p>none</p>' +
+      '<% } %>';
+    const data = {
+      skills: ['js', 'html', 'css'],
+      showSkills: true
+    };
+    const result = 'My skills:<a href="#">js</a><a href="#">html</a><a href="#">css</a>';
+    assert.equal(template.newRender(html, data), result);
   });
 });

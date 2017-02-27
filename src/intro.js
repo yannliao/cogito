@@ -33,7 +33,7 @@ class Templete {
   parse(tokens) {
     const len = tokens.length;
     let token;
-    let code = 'with(obj) { var ret=[];\n';
+    let code = 'with(data) { var ret=[];\n';
 
     for (let i = 0; i < len; i++) {
       token = tokens[i];
@@ -50,10 +50,34 @@ class Templete {
     // console.log(code + '\n');
     return code;
   }
+  newParse(tokens) {
+    // avalon2 like parser.
+    const len = tokens.length;
+    let token;
+    const rguide = /(@)(?=[$\w])/g;
+
+    let code = 'var ret=[];\n';
+
+    for (let i = 0; i < len; i++) {
+      token = tokens[i];
+      if (token.type === 'text') {
+        code += 'ret.push("' + token.expr.replace(/"/g, '\\"') + '");\n';
+      } else if (token.type === 'data') {
+        code += 'ret.push(' + token.expr.replace(rguide, 'data.') + ');\n';
+      } else {
+        code += token.expr.replace(rguide, 'data.') + '\n';
+      }
+    }
+    // console.log(code);
+    code = (code + 'return ret.join("");\n').replace(/[\r\t\n]/g, ' ');
+    // code += 'return ret.join(""); }';
+    // console.log(code + '\n');
+    return code;
+  }
   exec(code, options) {
     let result;
     try {
-      result = new Function('obj', code).apply(options, [options]);
+      result = new Function('data', code).apply(options, [options]);
     } catch (err) {
       console.error(err.message);
     }
@@ -62,12 +86,17 @@ class Templete {
   compile(html) {
     const tokens = this.tokenize(html);
     const code = this.parse(tokens);
-    return new Function('obj', code);
+    return new Function('data', code);
   }
   render(html, options) {
     const tokens = this.tokenize(html);
     const code = this.parse(tokens);
     return this.exec(code, options);
   }
+  newRender(html, options) {
+    const tokens = this.tokenize(html);
+    const code = this.newParse(tokens);
+    return this.exec(code, options);
+  }
 }
-module.exports =  new Templete();
+module.exports = new Templete();
